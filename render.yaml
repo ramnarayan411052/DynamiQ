@@ -1,0 +1,34 @@
+services:
+  - type: pserv
+    name: dynamiq-api
+    runtime: docker
+    plan: starter
+    region: oregon
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    disk:
+      name: dynamiq-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: SQLITE_PATH
+        value: /data/dynamiq.sqlite3
+
+  - type: web
+    name: dynamiq-dashboard
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerContext: ./frontend
+    dockerfilePath: ./frontend/Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          type: pserv
+          name: dynamiq-api
+          property: hostport
+      - key: BASIC_AUTH_USER
+        value: dynamiq
+      - key: BASIC_AUTH_PASSWORD
+        generateValue: true
