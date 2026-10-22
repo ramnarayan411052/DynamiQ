@@ -24,3 +24,9 @@ backend/tests/_schedule_export_test.csv
 .idea/
 Thumbs.db
 Desktop.ini
+**/__pycache__/
+**/.venv/
+**/venv/
+*.sqlite
+*.sqlite3
+*.db
